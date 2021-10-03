@@ -61,5 +61,5 @@ read -p ${org[c]}"にpushします(y/n) >" select
 if [ $select = "y" ]; then
     git push $push_target $branch
 else
-    echo $push_target"へのpushを中断しました"
+    echo ${org[0]}"へのpushを中断しました"
 fi
