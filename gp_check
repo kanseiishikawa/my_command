@@ -1,0 +1,64 @@
+#!/bin/sh
+
+count=$#
+
+if [ $count = 0 ]; then
+    git
+    exit
+fi
+
+git_c=$1
+
+if [ $git_c != "push" ]; then
+    git $@
+    exit
+fi
+
+if [ $2 = "-u" ]; then
+   push_target=$3
+   branch=$4
+else
+   push_target=$2
+   branch=$3
+fi  
+
+remote_data=`git remote -v`
+remote_list=(${remote_data})
+max=${#remote_list[@]}
+c=-1
+
+for ((i=0; i < $max; i+=2)); do
+    if [ ${remote_list[i]} = $push_target ]; then
+       c=i 
+       break
+    fi
+done
+
+if [ $c = -1 ]; then
+    echo $push_target"は存在しません"
+    echo "push先を確認してください"
+    exit
+fi
+    
+push=${remote_list[c]} #push先
+url=${remote_list[c+1]} #URL
+
+url_cut=(${url//:/ })
+check=${url_cut[0]}
+org_check=${url_cut[1]}
+org=(${org_check//// })
+c=-1
+
+if [ $check = "https" ]; then
+    c=1
+else
+    c=0
+fi
+
+read -p ${org[c]}"にpushします(y/n) >" select
+
+if [ $select = "y" ]; then
+    git push $push_target $branch
+else
+    echo $push_target"へのpushを中断しました"
+fi
