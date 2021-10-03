@@ -23,6 +23,7 @@ else
 fi  
 
 remote_data=`git remote -v`
+
 remote_list=(${remote_data})
 max=${#remote_list[@]}
 c=-1
