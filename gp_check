@@ -7,19 +7,11 @@ if [ $count = 0 ]; then
     exit
 fi
 
-git_c=$1
-
-if [ $git_c != "push" ]; then
-    git $@
-    exit
-fi
-
-if [ $2 = "-u" ]; then
-   push_target=$3
-   branch=$4
-else
+if [ $1 = "push" ]; then
    push_target=$2
    branch=$3
+else
+    exit
 fi  
 
 remote_data=`git remote -v`
